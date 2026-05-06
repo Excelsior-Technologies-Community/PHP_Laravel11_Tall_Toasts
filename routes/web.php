@@ -12,3 +12,6 @@ Route::get('/', function () {
 Route::get('/success', [ToastController::class, 'success']);
 Route::get('/error', [ToastController::class, 'error']);
 Route::get('/info', [ToastController::class, 'info']);
+
+// NEW ROUTE
+Route::post('/toast/custom', [ToastController::class, 'custom']);

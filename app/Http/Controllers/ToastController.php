@@ -32,4 +32,12 @@ class ToastController extends Controller
             'message' => 'This is an info message!'
         ]);
     }
+
+    public function custom(Request $request)
+    {
+        return redirect('/')->with('toast', [
+            'type' => $request->type,
+            'message' => $request->message
+        ]);
+    }
 }
