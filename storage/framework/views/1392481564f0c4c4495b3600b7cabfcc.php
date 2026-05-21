@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="csrf-token" content="{{ csrf_token() }}">
+    <meta name="csrf-token" content="<?php echo e(csrf_token()); ?>">
     <title>Toast Notifications</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
@@ -59,14 +59,15 @@
         <div id="toast-container" class="fixed top-5 right-5 z-50 space-y-3"></div>
 
         <!-- Session Toast -->
-        @if(session('toast'))
+        <?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if BLOCK]><![endif]--><?php endif; ?><?php if(session('toast')): ?>
         <div id="session-toast" 
              class="fixed top-5 right-5 z-50 px-5 py-3 rounded-lg shadow-lg text-white font-medium
-                @if(session('toast')['type'] == 'success') bg-green-500
-                @elseif(session('toast')['type'] == 'error') bg-red-500
-                @elseif(session('toast')['type'] == 'warning') bg-yellow-500
-                @else bg-blue-500 @endif">
-            {{ session('toast')['message'] }}
+                <?php if(session('toast')['type'] == 'success'): ?> bg-green-500
+                <?php elseif(session('toast')['type'] == 'error'): ?> bg-red-500
+                <?php elseif(session('toast')['type'] == 'warning'): ?> bg-yellow-500
+                <?php else: ?> bg-blue-500 <?php endif; ?>">
+            <?php echo e(session('toast')['message']); ?>
+
         </div>
         <script>
             setTimeout(() => {
@@ -77,7 +78,7 @@
                 }
             }, 3000);
         </script>
-        @endif
+        <?php endif; ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if ENDBLOCK]><![endif]--><?php endif; ?>
 
         <!-- Buttons Grid -->
         <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
@@ -106,7 +107,7 @@
             </h2>
             
             <form action="/toast/custom" method="POST" class="space-y-4">
-                @csrf
+                <?php echo csrf_field(); ?>
                 
                 <div>
                     <label class="block text-sm font-medium text-gray-700 mb-1">
@@ -218,4 +219,4 @@
         });
     </script>
 </body>
-</html>
+</html><?php /**PATH C:\xampp\htdocs\PHP_Laravel11_Tall_Toasts\resources\views/welcome.blade.php ENDPATH**/ ?>
