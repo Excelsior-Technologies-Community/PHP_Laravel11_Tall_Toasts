@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="csrf-token" content="{{ csrf_token() }}">
+    <meta name="csrf-token" content="<?php echo e(csrf_token()); ?>">
     <title>Toast Notifications</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://js.pusher.com/8.2.0/pusher.min.js"></script>
@@ -35,7 +35,7 @@
         <div class="bg-white rounded-xl shadow-md p-6">
             <h2 class="text-xl font-semibold text-gray-800 mb-5 text-center">Custom Toast</h2>
             <form id="customToastForm" class="space-y-4">
-                @csrf
+                <?php echo csrf_field(); ?>
                 <div>
                     <label class="block text-sm font-medium text-gray-700 mb-1">Message</label>
                     <input type="text" name="message" required placeholder="Enter your message..." class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500">
@@ -60,8 +60,8 @@
 
 <script>
         Pusher.logToConsole = false;
-        const pusher = new Pusher("{{ config('broadcasting.connections.pusher.key') }}", {
-            cluster: "{{ config('broadcasting.connections.pusher.options.cluster') }}"
+        const pusher = new Pusher("<?php echo e(config('broadcasting.connections.pusher.key')); ?>", {
+            cluster: "<?php echo e(config('broadcasting.connections.pusher.options.cluster')); ?>"
         });
 
         const channel = pusher.subscribe('toasts');
@@ -174,4 +174,4 @@
         }
     </script>
 </body>
-</html>
+</html><?php /**PATH D:\xampp\htdocs\git_desktop\PHP_Laravel11_Tall_Toasts\resources\views/welcome.blade.php ENDPATH**/ ?>
