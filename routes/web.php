@@ -12,5 +12,6 @@ Route::get('/error', [ToastController::class, 'error']);
 Route::get('/info', [ToastController::class, 'info']);
 Route::get('/warning', [ToastController::class, 'warning']);
 Route::post('/toast/custom', [ToastController::class, 'custom']);
-Route::get('/toast-history', [ToastController::class, 'history']);
+Route::get('/toast-history', [ToastController::class, 'history'])->name('history');
+
 Route::delete('/clear-history', [ToastController::class, 'clearHistory']);

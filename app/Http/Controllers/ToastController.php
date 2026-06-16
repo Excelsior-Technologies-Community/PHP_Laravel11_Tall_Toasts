@@ -3,40 +3,37 @@
 namespace App\Http\Controllers;
 
 use App\Models\Toast;
+use App\Events\ToastSent;
 use Illuminate\Http\Request;
 
 class ToastController extends Controller
 {
     public function success()
     {
-        return redirect('/')->with('toast', [
-            'type' => 'success',
-            'message' => 'Operation completed successfully!'
-        ]);
+        $toast = Toast::create(['message' => 'Operation completed successfully!', 'type' => 'success']);
+        event(new ToastSent($toast));
+        return redirect('/')->with('toast', ['type' => 'success', 'message' => $toast->message]);
     }
 
     public function error()
     {
-        return redirect('/')->with('toast', [
-            'type' => 'error',
-            'message' => 'Something went wrong!'
-        ]);
+        $toast = Toast::create(['message' => 'Something went wrong!', 'type' => 'error']);
+        event(new ToastSent($toast));
+        return redirect('/')->with('toast', ['type' => 'error', 'message' => $toast->message]);
     }
 
     public function info()
     {
-        return redirect('/')->with('toast', [
-            'type' => 'info',
-            'message' => 'New update available'
-        ]);
+        $toast = Toast::create(['message' => 'New update available', 'type' => 'info']);
+        event(new ToastSent($toast));
+        return redirect('/')->with('toast', ['type' => 'info', 'message' => $toast->message]);
     }
 
     public function warning()
     {
-        return redirect('/')->with('toast', [
-            'type' => 'warning',
-            'message' => 'Please check your input'
-        ]);
+        $toast = Toast::create(['message' => 'Please check your input', 'type' => 'warning']);
+        event(new ToastSent($toast));
+        return redirect('/')->with('toast', ['type' => 'warning', 'message' => $toast->message]);
     }
 
     public function custom(Request $request)
@@ -46,15 +43,27 @@ class ToastController extends Controller
             'type' => 'required|in:success,error,info,warning'
         ]);
 
+        $toast = Toast::create([
+            'message' => $request->message,
+            'type' => $request->type
+        ]);
+
+        event(new ToastSent($toast));
+
         return redirect('/')->with('toast', [
-            'type' => $request->type,
-            'message' => $request->message
+            'type' => $toast->type,
+            'message' => $toast->message
         ]);
     }
 
-    public function history()
+    public function history(Request $request)
     {
-        $toasts = Toast::latest()->paginate(20);
+        $toasts = Toast::query()
+            ->when($request->search, fn($q) => $q->where('message', 'like', '%'.$request->search.'%'))
+            ->when($request->type, fn($q) => $q->where('type', $request->type))
+            ->latest()
+            ->paginate(10);
+
         return view('history', compact('toasts'));
     }
 

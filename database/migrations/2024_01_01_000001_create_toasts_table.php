@@ -11,7 +11,9 @@ return new class extends Migration
         Schema::create('toasts', function (Blueprint $table) {
             $table->id();
             $table->string('message');
-            $table->string('type');
+            $table->string('type')->default('success'); 
+            $table->integer('duration')->default(3000);
+            $table->boolean('is_read')->default(false);
             $table->timestamps();
         });
     }

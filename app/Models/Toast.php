@@ -9,9 +9,15 @@ class Toast extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['message', 'type'];
+    protected $fillable = [
+        'message', 
+        'type', 
+        'duration', 
+        'is_read'
+    ];
 
     protected $casts = [
+        'is_read' => 'boolean',
         'created_at' => 'datetime',
         'updated_at' => 'datetime',
     ];
